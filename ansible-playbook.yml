@@ -1,7 +1,4 @@
 - hosts: all
-
-  become: true
-
   user: student01
 
   tasks:

@@ -1,0 +1,11 @@
+- hosts: all
+
+  become: true
+
+  user: student01
+
+  tasks:
+    - name: Debug message
+      debug: testvar01
+        msg: "It is working"
+        var: testvar01

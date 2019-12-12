@@ -6,6 +6,5 @@
 
   tasks:
     - name: Debug message
-      debug: testvar01
-        msg: "It is working"
-        var: testvar01
+       var: testvar01
+     debug: testvar01

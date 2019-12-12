@@ -3,5 +3,5 @@
 
   tasks:
     - name: Debug message
-     debug: 
-       var: testvar01
+      debug: 
+        var: testvar01

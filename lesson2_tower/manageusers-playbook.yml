@@ -1,0 +1,26 @@
+- hosts: all
+  become: yes
+  vars:
+      - users: 
+           - user01
+           - user02
+           - user03
+           - user04
+  tasks:
+    - name: create users
+      user:
+          name: "{{ item }}"
+      with_items: users
+      
+    - name: create file
+      file:
+         path: "/home/{{ item }}/user_created_date.txt"
+         state: touch
+      with_items: users
+      
+    - name: modify file
+      blockinfile:
+         path: "/home/{{ item }}/user_created_date.txt"
+         block: |
+                 "{{ ansible_date_time }}"
+      with_items: users

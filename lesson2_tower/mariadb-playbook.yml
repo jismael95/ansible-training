@@ -1,0 +1,14 @@
+- hosts: all
+  become: true
+  tasks:
+     - name: Install mariadb
+       package: 
+          name: "mariadb-server"
+          state: present
+          #register: operation
+     - name: Start mysql
+       service:
+          name: mariadb
+          state: started
+       #when: operation is changed
+  

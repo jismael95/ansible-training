@@ -1,0 +1,20 @@
+- hosts: all
+  become: yes
+  vars:
+     - lolo: 1
+     - ntp_server: time.google.com
+  roles:
+    - { role: rhel-system-roles.timesync, vars: { timesync_ntp_servers : [ { hostname: 'time.google.com', iburst: 'yes' } ] } }
+    
+  #roles:
+     #- { role: rhel-system-roles.timesync, vars: { timesync_ntp_servers : [ { hostname: "{{ ntp_server }}", iburst: 'yes' } ] } }
+     
+  tasks:
+    - name: Add rhel system roles
+      shell: subscription-manager repos --enable ansible-2-for-rhel-8-x86_64-rpms
+      
+    - name: Install it
+      package:
+         name: "rhel-system-roles"
+         state: present
+    

@@ -1,0 +1,11 @@
+- hosts: all
+  become: true
+  vars:
+    - httpd_service_state: restarted
+    #reloaded, restarted, started, stopped
+  
+  tasks:  
+    - name: Restart httpd service
+      service:
+        name: sttpd
+        state: "{{ httpd_service_state }}"

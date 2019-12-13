@@ -1,0 +1,12 @@
+- hosts: all
+  become: true
+  vars:
+    - mysql_service_state: restarted
+    #reloaded, restarted, started, stopped
+  
+  tasks:  
+    - name: Restart service mysql
+      service:
+        name: mariadb
+        state: "{{ mysql_service_state }}"
+

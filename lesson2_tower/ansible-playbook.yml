@@ -1,0 +1,7 @@
+- hosts: all
+  vars:
+       testvar01: Lolo
+  tasks:
+    - name: Print var
+      debug:
+        msg: "It is working: {{ testvar01 }}"

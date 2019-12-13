@@ -1,0 +1,78 @@
+- hosts: all
+  become: true
+  
+  vars:
+    - packages:
+        - httpd
+        - php
+    - ports:
+            - 80
+            - 81
+
+
+  tasks:
+
+    - block:
+      - name: Install Apache Packages
+        package:
+          name: "{{ item }}"
+          state: present
+        loop: "{{ packages }}"
+        notify: Restart httpd service
+
+      rescue:
+      - name: Install Apache Packages
+        package:
+          name: "{{ item }}"
+          state: present
+        loop: "{{ packages }}"
+        notify: Restart httpd service
+
+      always:
+      - name: "Create custom fact directory"
+        file:
+          path: "/var/www/html/php"
+          state: directory
+      - name: "Create PHP Info"
+        file:
+          path: "/var/www/html/ansible-service-{{ item }}/info.php"
+          state: touch
+        loop: "{{ ports }}"
+
+      - name: "Create PHP Info text"
+        blockinfile:
+          path: "/var/www/html/ansible-service-{{ item }}/info.php"
+          block: |
+                  <?php
+                     echo "Info from port {{ item }}";
+                     phpinfo();
+                  ?>
+        loop: "{{ ports }}"
+
+      - name: Copy Apache template config file
+        template:
+                src: httpd.conf.j2
+                dest: /etc/httpd/conf/httpd.conf
+                backup: yes
+          
+      - name: Create port directories
+        file:
+                path: "/var/www/html/ansible-service-{{ item }}/"
+                state: directory
+                
+        loop: "{{ ports }}"
+      - name: Copy html template web page file
+        template:
+                src: index.html.j2
+                dest: /var/www/html/ansible-service-{{ item }}/ansible-service-{{ item }}.html
+        loop: "{{ ports }}"
+        notify: Restart httpd service
+
+
+  handlers:
+
+    - name: Restart httpd service
+      service:
+        name: httpd
+        state: restarted
+

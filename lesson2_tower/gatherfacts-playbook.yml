@@ -1,0 +1,6 @@
+- hosts: all
+  become: true
+  tasks:
+   - name: debug local facts
+     debug:
+       var: ansible_facts
